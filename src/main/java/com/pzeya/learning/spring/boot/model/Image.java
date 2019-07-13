@@ -1,4 +1,4 @@
-package com.greglturnquist.learningspringboot.learningspringboot.model;
+package com.pzeya.learning.spring.boot.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

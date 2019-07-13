@@ -1,4 +1,4 @@
-package com.greglturnquist.learningspringboot.learningspringboot;
+package com.pzeya.learning.spring.boot;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

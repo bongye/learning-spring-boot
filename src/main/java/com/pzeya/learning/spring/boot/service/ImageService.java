@@ -1,13 +1,16 @@
-package com.greglturnquist.learningspringboot.learningspringboot.service;
+package com.pzeya.learning.spring.boot.service;
 
-import com.greglturnquist.learningspringboot.learningspringboot.model.Image;
+import com.pzeya.learning.spring.boot.model.Image;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.FileSystemUtils;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -34,6 +37,28 @@ public class ImageService {
     }
   }
 
+  public Mono<Resource> findOneImage(String filename) {
+    return Mono.fromSupplier(
+        () -> resourceLoader.getResource("file:" + UPLOAD_ROOT + "/" + filename));
+  }
+
+  public Mono<Void> createImage(Flux<FilePart> files) {
+    return files
+        .flatMap(file -> file.transferTo(Paths.get(UPLOAD_ROOT, file.filename()).toFile()))
+        .then();
+  }
+
+  public Mono<Void> deleteImage(String filename) {
+    return Mono.fromRunnable(
+        (() -> {
+          try {
+            Files.deleteIfExists(Paths.get(UPLOAD_ROOT, filename));
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
+        }));
+  }
+
   /**
    * Pre-load some test images
    *
@@ -47,9 +72,12 @@ public class ImageService {
 
       Files.createDirectory(Paths.get(UPLOAD_ROOT));
 
-      FileCopyUtils.copy("Test file", new FileWriter(UPLOAD_ROOT + "/learning-spring-boot-cover.jpg"));
-      FileCopyUtils.copy("Test file2", new FileWriter(UPLOAD_ROOT + "/learning-spring-boot-cover-2nd-edition-cover.jpg"));
-      FileCopyUtils.copy("Test file3", new FileWriter(UPLOAD_ROOT +"/bazinga.png"));
+      FileCopyUtils.copy(
+          "Test file", new FileWriter(UPLOAD_ROOT + "/learning-spring-boot-cover.jpg"));
+      FileCopyUtils.copy(
+          "Test file2",
+          new FileWriter(UPLOAD_ROOT + "/learning-spring-boot-cover-2nd-edition-cover.jpg"));
+      FileCopyUtils.copy("Test file3", new FileWriter(UPLOAD_ROOT + "/bazinga.png"));
     };
   };
 }
