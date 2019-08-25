@@ -32,20 +32,24 @@ public class ImageService {
   }
 
   public Flux<Image> findAllImages() {
-    return imageRepository.findAll();
+    return imageRepository.findAll().log("findAll");
   }
 
   public Mono<Resource> findOneImage(String filename) {
     return Mono.fromSupplier(
-        () -> resourceLoader.getResource("file:" + UPLOAD_ROOT + "/" + filename));
+            () -> resourceLoader.getResource("file:" + UPLOAD_ROOT + "/" + filename))
+        .log("findOneImage");
   }
 
   public Mono<Void> createImage(Flux<FilePart> files) {
     return files
+        .log("createImage-files")
         .flatMap(
             file -> {
               Mono<Image> savedDataBaseImage =
-                  imageRepository.save(new Image(UUID.randomUUID().toString(), file.filename()));
+                  imageRepository
+                      .save(new Image(UUID.randomUUID().toString(), file.filename()))
+                      .log("createImage-save");
               Mono<Void> copyFile =
                   Mono.just(Paths.get(UPLOAD_ROOT, file.filename()).toFile())
                       .log("createImage-picktarget")
@@ -61,26 +65,36 @@ public class ImageService {
                       .log("createImage-newFile")
                       .flatMap(file::transferTo)
                       .log("createImage-copy");
-              return Mono.when(savedDataBaseImage, copyFile);
+              return Mono.when(savedDataBaseImage, copyFile).log("createImage-when");
             })
-        .then();
+        .log("createImage-flatMap")
+        .then()
+        .log("createImage-done");
   }
 
   public Mono<Void> deleteImage(String filename) {
     Mono<Void> deleteDataBaseImage =
-        imageRepository.findByName(filename).flatMap(imageRepository::delete);
+        imageRepository
+            .findByName(filename)
+            .log("deleteImage-find")
+            .flatMap(imageRepository::delete)
+            .log("deleteImage-record");
 
-    Mono<Void> deleteFile =
+    Mono<Object> deleteFile =
         Mono.fromRunnable(
-            () -> {
-              try {
-                Files.deleteIfExists(Paths.get(UPLOAD_ROOT, filename));
-              } catch (IOException e) {
-                throw new RuntimeException(e);
-              }
-            });
+                () -> {
+                  try {
+                    Files.deleteIfExists(Paths.get(UPLOAD_ROOT, filename));
+                  } catch (IOException e) {
+                    throw new RuntimeException(e);
+                  }
+                })
+            .log("deleteImage-file");
 
-    return Mono.when(deleteDataBaseImage, deleteFile).then();
+    return Mono.when(deleteDataBaseImage, deleteFile)
+        .log("deleteImage-when")
+        .then()
+        .log("deleteImage-done");
   }
 
   /**

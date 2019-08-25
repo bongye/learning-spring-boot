@@ -3,3 +3,14 @@ management:
     web:
       exposure:
         include: "*"
+
+logging:
+  level:
+    com:
+      pzeya: "DEBUG"
+    org:
+      sprintframework:
+        data: "TRACE"
+    reactor:
+      core: "TRACE"
+      util: "TRACE"

@@ -5,9 +5,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Document(collection = "employee")
+@Document
 public class Employee {
-  @Id String id;
-  String firstName;
-  String lastName;
+  @Id private String id;
+  private String firstName;
+  private String lastName;
+  private String role;
 }
