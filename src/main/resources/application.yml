@@ -4,6 +4,11 @@ management:
       exposure:
         include: "*"
 
+spring:
+  devtools:
+    remote:
+      secret: "learning-spring-boot"
+
 logging:
   level:
     com:

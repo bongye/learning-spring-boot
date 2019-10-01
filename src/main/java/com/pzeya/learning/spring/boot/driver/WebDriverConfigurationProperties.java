@@ -12,16 +12,16 @@ public class WebDriverConfigurationProperties {
 
   @Data
   static class Firefox {
-    private boolean enabled = true;
+    private boolean enabled = false;
   }
 
   @Data
   static class Safari {
-    private boolean enabled = true;
+    private boolean enabled = false;
   }
 
   @Data
   static class Chrome {
-    private boolean enabled = true;
+    private boolean enabled = false;
   }
 }
