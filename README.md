@@ -8,3 +8,10 @@ Learning Spring Boot 2.0 Seconds Edition By Greg Turnquist
 ```
 sudo service mongodb start
 ```
+## RabbitMQ install & run
+```
+sudo apt-get install rabbitmq-server
+sudo rabbitmq-server
+sudo rabbitmqctl start_app
+sudo rabbitmq-plugins enable rabbitmq_management
+```
