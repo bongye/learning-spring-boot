@@ -1,6 +1,5 @@
-package com.pzeya.learning.spring.boot.service;
+package com.pzeya.learning.spring.boot.images;
 
-import com.pzeya.learning.spring.boot.model.Image;
 import org.springframework.core.io.Resource;
 import org.springframework.http.codec.multipart.FilePart;
 import reactor.core.publisher.Flux;
@@ -8,10 +7,10 @@ import reactor.core.publisher.Flux;
 import java.time.Duration;
 import java.util.List;
 
-public class BlokingImageService {
+public class BlockingImageService {
   private final ImageService imageService;
 
-  public BlokingImageService(ImageService imageService) {
+  public BlockingImageService(ImageService imageService) {
     this.imageService = imageService;
   }
 

@@ -1,6 +1,7 @@
 package com.pzeya.learning.spring.boot.repository;
 
-import com.pzeya.learning.spring.boot.model.Image;
+import com.pzeya.learning.spring.boot.images.Image;
+import com.pzeya.learning.spring.boot.images.ImageRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 
 @RunWith(SpringRunner.class)
 @DataMongoTest
-public class EmbeddedImageRepositoryTests {
+public class ImageRepositoryTests {
   @Autowired ImageRepository repository;
 
   @Autowired MongoOperations operations;

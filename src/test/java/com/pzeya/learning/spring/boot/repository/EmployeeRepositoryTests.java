@@ -1,14 +1,18 @@
 package com.pzeya.learning.spring.boot.repository;
 
-import com.pzeya.learning.spring.boot.model.Employee;
+import com.pzeya.learning.spring.boot.employee.Employee;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -18,26 +22,29 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
 import static org.springframework.data.mongodb.core.query.Criteria.byExample;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
+@RunWith(SpringRunner.class)
+@DataMongoTest
 public class EmployeeRepositoryTests {
+  @Autowired MongoOperations mongoOperations;
   @Autowired ReactiveMongoOperations operations;
 
   @Before
   public void setUp() {
-    operations.dropCollection(Employee.class);
+    mongoOperations.dropCollection(Employee.class);
 
     Employee e1 = new Employee();
     e1.setId(UUID.randomUUID().toString());
     e1.setFirstName("Bilbo");
     e1.setLastName("Baggins");
     e1.setRole("burglar");
-    operations.insert(e1);
+    mongoOperations.insert(e1);
 
     Employee e2 = new Employee();
     e2.setId(UUID.randomUUID().toString());
     e2.setFirstName("Frodo");
     e2.setLastName("Baggins");
     e2.setRole("ring bearer");
-    operations.insert(e2);
+    mongoOperations.insert(e2);
   }
 
   @Test

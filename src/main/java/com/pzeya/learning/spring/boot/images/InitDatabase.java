@@ -1,6 +1,5 @@
-package com.pzeya.learning.spring.boot.component;
+package com.pzeya.learning.spring.boot.images;
 
-import com.pzeya.learning.spring.boot.model.Image;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.MongoOperations;

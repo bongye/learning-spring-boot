@@ -1,4 +1,4 @@
-package com.pzeya.learning.spring.boot.model;
+package com.pzeya.learning.spring.boot.employee;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

@@ -1,5 +1,6 @@
 package com.pzeya.learning.spring.boot.model;
 
+import com.pzeya.learning.spring.boot.images.Image;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 

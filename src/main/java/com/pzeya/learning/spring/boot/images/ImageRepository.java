@@ -1,6 +1,5 @@
-package com.pzeya.learning.spring.boot.repository;
+package com.pzeya.learning.spring.boot.images;
 
-import com.pzeya.learning.spring.boot.model.Image;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Mono;
 

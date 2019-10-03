@@ -1,6 +1,5 @@
-package com.pzeya.learning.spring.boot.repository;
+package com.pzeya.learning.spring.boot.employee;
 
-import com.pzeya.learning.spring.boot.model.Employee;
 import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 

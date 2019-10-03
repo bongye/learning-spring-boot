@@ -1,6 +1,7 @@
 package com.pzeya.learning.spring.boot;
 
-import com.pzeya.learning.spring.boot.service.ImageService;
+import com.pzeya.learning.spring.boot.comments.CommentReaderRepository;
+import com.pzeya.learning.spring.boot.images.ImageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
@@ -13,17 +14,19 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 @Controller
 @Slf4j
 public class HomeController {
-
   private static final String BASE_PATH = "/images";
   private static final String FILENAME = "{filename:.+}";
   private final ImageService imageService;
+  private final CommentReaderRepository repository;
 
-  public HomeController(ImageService imageService) {
+  public HomeController(ImageService imageService, CommentReaderRepository repository) {
     this.imageService = imageService;
+    this.repository = repository;
   }
 
   @GetMapping(value = BASE_PATH + "/" + FILENAME + "/raw", produces = MediaType.IMAGE_JPEG_VALUE)
@@ -56,7 +59,23 @@ public class HomeController {
 
   @GetMapping("/")
   public Mono<String> index(Model model) {
-    model.addAttribute("images", imageService.findAllImages());
+    model.addAttribute(
+        "images",
+        imageService
+            .findAllImages()
+            .flatMap(
+                image ->
+                    Mono.just(image)
+                        .zipWith(repository.findByImageId(image.getId()).collectList())
+                        .map(
+                            imageAndComments ->
+                                new HashMap<String, Object>() {
+                                  {
+                                    put("id", imageAndComments.getT1().getId());
+                                    put("name", imageAndComments.getT1().getName());
+                                    put("comments", imageAndComments.getT2());
+                                  }
+                                })));
     model.addAttribute("extra", "DevTools can also detect code changes too");
     return Mono.just("index");
   }

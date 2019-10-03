@@ -1,7 +1,5 @@
-package com.pzeya.learning.spring.boot.service;
+package com.pzeya.learning.spring.boot.images;
 
-import com.pzeya.learning.spring.boot.model.Image;
-import com.pzeya.learning.spring.boot.repository.ImageRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;

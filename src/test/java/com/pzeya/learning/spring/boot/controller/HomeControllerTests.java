@@ -1,8 +1,8 @@
 package com.pzeya.learning.spring.boot.controller;
 
 import com.pzeya.learning.spring.boot.HomeController;
-import com.pzeya.learning.spring.boot.model.Image;
-import com.pzeya.learning.spring.boot.service.ImageService;
+import com.pzeya.learning.spring.boot.images.Image;
+import com.pzeya.learning.spring.boot.images.ImageService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
