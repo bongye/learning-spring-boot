@@ -11,7 +11,7 @@ sudo service mongodb start
 ## RabbitMQ install & run
 ```
 sudo apt-get install rabbitmq-server
-sudo rabbitmq-server
+sudo service rabbitmq-server start
 sudo rabbitmqctl start_app
 sudo rabbitmq-plugins enable rabbitmq_management
 ```
