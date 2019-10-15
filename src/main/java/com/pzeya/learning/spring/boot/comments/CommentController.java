@@ -1,5 +1,6 @@
 package com.pzeya.learning.spring.boot.comments;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,8 +10,11 @@ import reactor.core.publisher.Mono;
 public class CommentController {
   private final RabbitTemplate rabbitTemplate;
 
-  public CommentController(RabbitTemplate rabbitTemplate) {
+  private final MeterRegistry meterRegistry;
+
+  public CommentController(RabbitTemplate rabbitTemplate, MeterRegistry meterRegistry) {
     this.rabbitTemplate = rabbitTemplate;
+    this.meterRegistry = meterRegistry;
   }
 
   @PostMapping("/comments")
@@ -19,10 +23,18 @@ public class CommentController {
         .flatMap(
             comment ->
                 Mono.fromRunnable(
-                    () ->
-                        rabbitTemplate.convertAndSend(
-                            "learning-spring-boot", "comments.new", comment)))
+                        () ->
+                            rabbitTemplate.convertAndSend(
+                                "learning-spring-boot", "comments.new", comment))
+                    .then(Mono.just(comment)))
         .log("commentService-publish")
-        .then(Mono.just("redirect:/"));
+        .flatMap(
+            comment -> {
+              meterRegistry
+                  .counter("comments.produced", "imageId", comment.getImageId())
+                  .increment();
+              ;
+              return Mono.just("redirect:/");
+            });
   }
 }

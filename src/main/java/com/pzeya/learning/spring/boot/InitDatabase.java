@@ -1,5 +1,7 @@
-package com.pzeya.learning.spring.boot.images;
+package com.pzeya.learning.spring.boot;
 
+import com.pzeya.learning.spring.boot.comments.Comment;
+import com.pzeya.learning.spring.boot.images.Image;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -11,6 +13,7 @@ public class InitDatabase {
   CommandLineRunner init(MongoOperations operations) {
     return args -> {
       operations.dropCollection(Image.class);
+      operations.dropCollection(Comment.class);
 
       operations.insert(new Image("1", "learning-spring-bootcover.jpg"));
       operations.insert(new Image("2", "learning-spring-boot-2nd-edition-cover.jpg"));
