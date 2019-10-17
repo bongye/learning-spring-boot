@@ -8,7 +8,15 @@ spring:
   devtools:
     remote:
       secret: "learning-spring-boot"
-
+  cloud:
+    stream:
+      bindings:
+        input:
+          destination: learning-spring-boot-comments
+          group: learning-spring-boot
+        output:
+          destination: learning-spring-boot-comments
+          group: learning-spring-boot
 logging:
   level:
     com:
